@@ -32,9 +32,21 @@ bottomFrame.pack()
 
 
 # Label stuff
-theLabel1 = Label(root, text="Model Selection:")
-theLabel1.pack()  # Places this widget inside the window
-theLabel1.place(x=0, y=0)  # Position with x,y coordinates
+label1 = Label(root, text="Model Selection:")
+label1.pack()  # Places this widget inside the window
+label1.place(x=0, y=0)  # Position with x,y coordinates
+
+label2 = tk.Label(text="User Input Section")
+label2.pack()
+label2.place(x=0,y=25)
+
+label3 = tk.Label(text="Model Output Section")
+label3.pack()
+label3.place(x=190,y=25)
+
+label4 = tk.Label(text="Output Display")
+label4.pack()
+label4.place(x=190,y=45)
 
 # Test function stuff
 def doSomething():
@@ -79,6 +91,20 @@ combobox.place(x=100,y=0)
 loadModelbut = tk.Button(root, text="Load Model", command=getSelection, fg="black", bg="grey")
 loadModelbut.place(x=250,y=0)
 
+# Radio button stuff
+var = IntVar()
+
+# Create the first radio button
+Textbut = Radiobutton(root, text="Text",variable=var, value=1, command=doSomething)
+Textbut.pack()
+Textbut.place(x=0,y=45)
+
+# Create the second radio button
+Imagebut = Radiobutton(root, text="Image",variable=var, value=2, command=doSomething)
+Imagebut.pack()
+Imagebut.place(x=50,y=45)
+
 
 root.mainloop() # Keeps the window open, the close button breaks the loop
+
 
