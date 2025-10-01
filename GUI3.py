@@ -117,15 +117,7 @@ rb_image = ttk.Radiobutton(left_box, text="Image", variable=var, value=2, comman
 rb_text.place(x=10, y=8)
 rb_image.place(x=90, y=8)
 
-# Browse button 
-def browseFile():
-    path = filedialog.askopenfilename(
-        title="Select a file",
-        filetypes=[("All supported", "*.png *.jpg *.jpeg *.bmp *.txt *.wav *.mp3"), ("All files", "*.*")]
-    )
-    if path:
-        outputBox.insert("end", f"Selected file: {path}\n"); outputBox.see("end")
-
+# Create browse button
 browseBtn = ttk.Button(left_box, text="Browse", command=browseFile)
 browseBtn.place(x=250, y=5)
 
@@ -177,5 +169,6 @@ oopLbl = ttk.Label(
 oopLbl.place(x=285, y=30) 
 
 root.mainloop() # Keeps the window open, the close button breaks the lo
+
 
 
