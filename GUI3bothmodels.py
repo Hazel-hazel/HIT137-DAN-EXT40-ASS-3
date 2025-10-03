@@ -208,13 +208,13 @@ Label(root, text="Model Selection:").place(x=10, y=8)
 options = ["Text-to-Image"]
 selectedItem = tk.StringVar(value="Text-to-Image")
 combobox = ttk.Combobox(root, textvariable=selectedItem, values=options, state="readonly", width=22)
-combobox.place(x=130, y=5)
+combobox.place(x=118, y=9)
 
 def load_model_clicked():
     run_in_thread(load_text2image)
 
 loadModelbut = tk.Button(root, text="Load Model", command=load_model_clicked, fg="white", bg="blue")
-loadModelbut.place(x=360, y=5, width=110, height=24)
+loadModelbut.place(x=280, y=7, width=110, height=24)
 
 # User Input Section
 left_box = ttk.Labelframe(root, text="User Input Section")
@@ -241,7 +241,7 @@ def browseFile():
         except Exception:
             pass
 
-ttk.Button(left_box, text="Browse", command=browseFile).place(x=300, y=5)
+ttk.Button(left_box, text="Browse", command=browseFile).place(x=270, y=2, width=110, height=24)
 
 inputText = tk.Text(left_box)
 inputText.place(x=10, y=36, width=370, height=120)
@@ -314,7 +314,7 @@ menu.add_cascade(label="File", menu=fileMenu)
 helpMenu = Menu(menu, tearoff=0)
 def show_about():
     top = Toplevel(root); top.title("About")
-    msg = "HIT137 – Tkinter + Hugging Face (sd-turbo) demo."
+    msg = "HIT137 – Tkinter + Hugging Face (sd-turbo and speechT5) demo."
     Label(top, text=msg, padx=12, pady=12).pack()
     Button(top, text="OK", command=top.destroy).pack(pady=6)
 helpMenu.add_command(label="About", command=show_about)
