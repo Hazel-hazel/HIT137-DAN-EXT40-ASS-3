@@ -7,6 +7,29 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 from diffusers import StableDiffusionPipeline
 import torch, threading, os
+#import speechT5b
+from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan
+from datasets import load_dataset
+import torch
+import random
+import string
+import soundfile as sf
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Load the processor, model, and vocoder
+processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
+vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan").to(device)
+
+# Load speaker embeddings dataset
+embeddings_dataset = load_dataset("Matthijs/cmu-arctic-xvectors", split="validation")
+
+# Define speaker IDs (example: US female voice)
+speakers = {
+    'clb': 2271,  # US female
+    'slt': 6799   # US female
+}
 
 root = tk.Tk()  # Creates a blank window
 root.title("Tkinter AI GUI")
@@ -16,9 +39,39 @@ root.geometry("700x650")  # enlarged from GUI3
 # Color theme
 root.configure(bg="light blue")
 style = ttk.Style()
-style.theme_use('clam')
+style.theme_use('default')
 style.configure('TButton', background='blue', foreground='white')
 style.map('TButton', background=[('active', 'red')])
+
+def save_text_to_speech(text, speaker=None):
+    # Preprocess text
+    inputs = processor(text=text, return_tensors="pt").to(device)
+    
+    if speaker is not None:
+        # Load speaker embedding from dataset
+        speaker_embeddings = torch.tensor(embeddings_dataset[speaker]["xvector"]).unsqueeze(0).to(device)
+    else:
+        # Use random speaker embedding for a random voice
+        speaker_embeddings = torch.randn((1, 512)).to(device)
+    
+    # Generate speech
+    speech = model.generate_speech(inputs["input_ids"], speaker_embeddings, vocoder=vocoder)
+    
+    # Generate filename
+    if speaker is not None:
+        output_filename = f"{speaker}-{'-'.join(text.split()[:6])}.mp3"
+    else:
+        random_str = ''.join(random.sample(string.ascii_letters + string.digits, k=5))
+        output_filename = f"{random_str}-{'-'.join(text.split()[:6])}.mp3"
+    
+    # Save audio file with 16kHz sampling rate
+    sf.write(output_filename, speech.cpu().numpy(), samplerate=16000)
+        
+    return output_filename
+
+def model1(text):
+    # Generate speech with a US female voice
+    save_text_to_speech(text, speaker=speakers["slt"])
 
 # Helpers
 def run_in_thread(fn, *a, **k):
@@ -171,7 +224,7 @@ inputText = tk.Text(left_box)
 inputText.place(x=10, y=36, width=370, height=120)
 inputText.insert("1.0", "a cute robot reading a book")
 
-run1Btn  = ttk.Button(left_box, text="Run Model 1", command=generate_image)
+run1Btn  = ttk.Button(left_box, text="Run Model 1", command=model1("a cute robot reading a book"))
 run2Btn  = ttk.Button(left_box, text="Run Model 2", command=generate_image)
 clearBtn = ttk.Button(left_box, text="Clear", command=lambda: outputBox.delete("1.0", "end"))
 run1Btn.place(x=10,  y=165, width=120)
