@@ -1,18 +1,17 @@
 """
 Hit137: Team Dan_Ext40
-
 Assignment 3
 
-Program: Mainfile GUI.py
+Program: GUI.py
+Authors: Kudzaishe Mutyasira and Andrew Morris 
+Last date modified: 04/10/25
 
-Authors: Maharun Momo Islam, Moneya Islam, Andrew Morris, Kudzaishe Mutyasira
-
-Last date modified: 02/10/25
-
+This is the mainfile of a GUI for two AI transformer models from hugging face.
 """
 
 def main():
     import GUI3
    
 main()
+
 
