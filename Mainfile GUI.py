@@ -10,8 +10,9 @@ This is the mainfile of a GUI for two AI transformer models from hugging face.
 """
 
 def main():
-    import GUI3
+    import GUI3bothmodels
    
 main()
+
 
 
